@@ -1,0 +1,11 @@
+.env
+*.pyc
+__pycache__/
+.venv/
+venv/
+state.db
+dashboard.html
+teams.json
+public/
+.omc/
+.pytest_cache/

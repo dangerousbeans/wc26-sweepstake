@@ -1,0 +1,5 @@
+Kicking off soon: {{ match.home_name }} vs {{ match.away_name }}
+{{ match.utc_kickoff | local_time }}{% if match.stage %} · {{ match.stage }}{% endif %}{% if match.group %} · {{ match.group }}{% endif %}
+{{ match | owners_label }}
+
+-- FootballWatcherBot

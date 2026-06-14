@@ -1,0 +1,57 @@
+# World Cup sweepstake roster.
+# Each person drew a set of countries; "number" is the draw/seed number.
+# The display name is matched to the football-data.org team via an alias table
+# in footballwatcher/team_resolver.py — if a name fails to resolve, the resolver
+# logs it and you can add an alias there.
+people:
+  Barrett:
+    - { country: Jordan, number: 63 }
+    - { country: Ghana, number: 73 }
+    - { country: Mexico, number: 15 }
+    - { country: Uruguay, number: 17 }
+    - { country: Iraq, number: 57 }
+  Joran:
+    - { country: Paraguay, number: 40 }
+    - { country: Cape Verde, number: 68 }
+    - { country: Netherlands, number: 8 }
+    - { country: Croatia, number: 11 }
+    - { country: South Africa, number: null }
+    - { country: Sweden, number: 38 }
+  Rich:
+    - { country: Bosnia & Herzegovina, number: 64 }
+    - { country: Ivory Coast, number: 34 }
+    - { country: Colombia, number: 13 }
+    - { country: Austria, number: 23 }
+    - { country: Brazil, number: 6 }
+  Sylvia:
+    - { country: Qatar, number: 55 }
+    - { country: Uzbekistan, number: 50 }
+    - { country: Portugal, number: 5 }
+    - { country: Belgium, number: 9 }
+    - { country: Morocco, number: 7 }
+  Alanah:
+    - { country: Saudi Arabia, number: 69 }
+    - { country: Tunisia, number: 46 }
+    - { country: Iran, number: 21 }
+    - { country: USA, number: 16 }
+    - { country: Czechia, number: 41 }
+  Jackie:
+    - { country: Panama, number: 33 }
+    - { country: Egypt, number: 29 }
+    - { country: Switzerland, number: 19 }
+    - { country: England, number: 4 }
+    - { country: New Zealand, number: 85 }
+    - { country: Algeria, number: 28 }
+  Ash:
+    - { country: Curaçao, number: 83 }
+    - { country: Canada, number: 30 }
+    - { country: France, number: 1 }
+    - { country: Spain, number: 2 }
+    - { country: Argentina, number: 3 }
+  Tam:
+    - { country: Haiti, number: 82 }
+    - { country: DR Congo, number: 45 }
+    - { country: South Korea, number: 25 }
+    - { country: Senegal, number: 14 }
+    - { country: Japan, number: 18 }
+    - { country: Australia, number: 27 }

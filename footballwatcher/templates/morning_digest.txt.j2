@@ -1,0 +1,7 @@
+World Cup — today's sweepstake matches
+{{ digest_date }} — {{ matches|length }} match(es) involving our teams.
+
+{% for m in matches -%}
+- {{ m.utc_kickoff | local_time }}  {{ m.home_name }} vs {{ m.away_name }}  [{{ m | owners_label }}]
+{% endfor %}
+-- FootballWatcherBot

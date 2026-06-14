@@ -1,0 +1,8 @@
+Full time: {{ match.home_name }} {{ match.home_score }}-{{ match.away_score }} {{ match.away_name }}
+{{ match | owners_label }}{% if match.stage %} · {{ match.stage }}{% endif %}{% if match.group %} · {{ match.group }}{% endif %}
+
+{{ summary }}
+{% if match.scorers %}
+Goals: {% for s in match.scorers %}{{ s.name }}{% if s.minute is not none %} {{ s.minute }}'{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}
+{% endif %}
+-- FootballWatcherBot

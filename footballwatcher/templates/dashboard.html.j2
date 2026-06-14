@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>World Cup Sweepstake — Schedule</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --cyan:#05d9e8; --magenta:#ff2a6d; --pink:#ff6ac1; --purple:#9d4edd;
+        --yellow:#fee440; --ink:#1a0938; --panel:rgba(26,9,56,.72);
+        --line:rgba(255,42,109,.45); --muted:#b39ddb;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        font-family: 'VT323', 'Courier New', monospace; font-size: 19px; line-height: 1.25;
+        margin: 0; color:#eafcff; min-height:100vh; position:relative; overflow-x:hidden;
+        background: linear-gradient(180deg, #16002e 0%, #2b0a4d 38%, #6a1361 64%, #b3245f 84%, #ff6b35 100%);
+        background-attachment: fixed;
+      }
+      /* Perspective neon grid floor */
+      body::before {
+        content:""; position:fixed; left:-25%; right:-25%; bottom:0; height:48vh; z-index:0; pointer-events:none;
+        background-image:
+          linear-gradient(var(--cyan) 1px, transparent 1px),
+          linear-gradient(90deg, var(--cyan) 1px, transparent 1px);
+        background-size: 56px 56px;
+        transform: perspective(340px) rotateX(62deg); transform-origin: bottom;
+        opacity:.35; filter: drop-shadow(0 0 6px var(--cyan));
+      }
+      /* CRT scanlines */
+      body::after {
+        content:""; position:fixed; inset:0; z-index:9999; pointer-events:none;
+        background: repeating-linear-gradient(rgba(0,0,0,0) 0 2px, rgba(0,0,0,.16) 2px 4px);
+      }
+      .wrap { position:relative; z-index:1; }
+
+      header { padding: 40px 24px 28px; text-align:center; position:relative; overflow:hidden; }
+      /* retro sun */
+      header::before {
+        content:""; position:absolute; top:-30px; left:50%; transform:translateX(-50%);
+        width:260px; height:260px; border-radius:50%; z-index:-1;
+        background: linear-gradient(180deg, var(--yellow) 0%, var(--pink) 55%, var(--magenta) 100%);
+        -webkit-mask-image: repeating-linear-gradient(#000 0 12px, transparent 12px 16px);
+        mask-image: repeating-linear-gradient(#000 0 12px, transparent 12px 16px);
+        opacity:.5; filter: blur(.4px) drop-shadow(0 0 30px var(--magenta));
+      }
+      h1 {
+        font-family:'Press Start 2P', monospace; font-size: clamp(15px, 3.4vw, 30px);
+        margin:0; letter-spacing:1px; line-height:1.5;
+        color:#fff;
+        text-shadow: 0 0 5px var(--cyan), 0 0 12px var(--magenta), 0 0 26px var(--magenta);
+      }
+      .sub { font-size:17px; margin-top:14px; color:var(--cyan); letter-spacing:1px;
+             text-shadow:0 0 8px rgba(5,217,232,.7); }
+      .badge17 { display:inline-block; font-family:'Press Start 2P', monospace; font-size:9px;
+                 color:var(--ink); background:var(--yellow); padding:4px 7px; border-radius:3px;
+                 box-shadow:0 0 12px var(--yellow); vertical-align:middle; margin-left:6px; }
+
+      .layout { display:flex; align-items:flex-start; padding: 0 14px 40px; gap:14px; max-width:1200px; margin:0 auto; }
+      main { flex:1; min-width:0; }
+
+      .panel-title { font-family:'Press Start 2P', monospace; font-size:13px; color:var(--pink);
+                     text-shadow:0 0 8px var(--magenta); margin:24px 6px 12px; letter-spacing:.5px; }
+
+      /* Picks */
+      .picks-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:12px; }
+      .pick-card { background:var(--panel); border:1px solid var(--c, var(--cyan));
+                   border-left:4px solid var(--c, var(--cyan)); border-radius:8px; padding:11px 13px;
+                   box-shadow:0 0 14px rgba(157,78,221,.25), inset 0 0 18px rgba(5,217,232,.05); backdrop-filter: blur(3px); }
+      .pick-name { display:flex; align-items:center; gap:8px; font-size:21px; font-weight:700; margin-bottom:8px;
+                   color:#fff; text-shadow:0 0 8px var(--c, var(--cyan)); }
+      .pick-name .dot { width:12px; height:12px; border-radius:50%; background:var(--c, var(--cyan));
+                        box-shadow:0 0 8px var(--c, var(--cyan)); }
+      .pick-teams { display:flex; flex-wrap:wrap; gap:6px; }
+      .team-chip { font-size:15px; background:rgba(5,217,232,.12); border:1px solid rgba(5,217,232,.4);
+                   color:#caf7ff; padding:2px 9px; border-radius:5px; }
+
+      /* Schedule */
+      .day { font-family:'Press Start 2P', monospace; font-size:11px; color:var(--cyan);
+             padding:10px 8px; margin-top:18px; border-bottom:1px solid var(--line);
+             text-shadow:0 0 8px rgba(5,217,232,.6); }
+      table { width:100%; border-collapse: collapse; }
+      td { padding: 11px 10px; text-align:left; vertical-align: top; }
+      tr.match { border-bottom:1px solid rgba(157,78,221,.22); }
+      tr.match.h2h { background: linear-gradient(90deg, rgba(255,42,109,.22), transparent 65%);
+                     border-left:3px solid var(--magenta); box-shadow: inset 0 0 22px rgba(255,42,109,.12); }
+      .time { color:var(--yellow); white-space:nowrap; text-shadow:0 0 6px rgba(254,228,64,.5); }
+      .fixture { display:flex; flex-wrap:wrap; align-items:center; gap:7px; }
+      .side { display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap; }
+      .team { font-weight:700; font-size:21px; color:#fff; }
+      .vs { color:var(--purple); margin:0 3px; font-size:16px; }
+      .pill { display:inline-flex; align-items:center; font-size:13px; font-weight:700; color:#0a0420;
+              padding:1px 10px; border-radius:999px; background:var(--c, #444); letter-spacing:.3px;
+              box-shadow:0 0 10px var(--c, #444); text-shadow:none; }
+      .h2h-badge { display:inline-block; margin-top:5px; font-family:'Press Start 2P', monospace;
+                   font-size:8px; letter-spacing:1px; color:#fff; background:var(--magenta);
+                   padding:4px 7px; border-radius:4px; box-shadow:0 0 12px var(--magenta); }
+      .score { font-weight:700; white-space:nowrap; font-size:23px; color:#fff;
+               text-shadow:0 0 10px var(--cyan); }
+      .status { font-family:'Press Start 2P', monospace; font-size:8px; letter-spacing:.5px;
+                padding:4px 6px; border-radius:4px; background:rgba(157,78,221,.3); color:var(--muted); }
+      .status.LIVE, .status.IN_PLAY, .status.PAUSED { background:var(--magenta); color:#fff;
+                box-shadow:0 0 14px var(--magenta); animation:pulse 1.1s ease-in-out infinite; }
+      .status.FINISHED { background:var(--cyan); color:#04222b; box-shadow:0 0 12px var(--cyan); }
+      @keyframes pulse { 0%,100%{ opacity:1 } 50%{ opacity:.45 } }
+      footer { padding:30px 24px; color:var(--muted); font-size:15px; text-align:center; letter-spacing:1px; }
+
+      /* Floating leaderboard */
+      .leaderboard { position: sticky; top: 14px; width: 264px; flex:0 0 auto; margin-top:24px;
+                     background:var(--panel); border:1px solid var(--magenta); border-radius:12px;
+                     padding:16px; backdrop-filter: blur(6px);
+                     box-shadow:0 0 24px rgba(255,42,109,.4), inset 0 0 30px rgba(157,78,221,.12); }
+      .leaderboard h2 { font-family:'Press Start 2P', monospace; font-size:12px; margin:0 0 4px;
+                        color:var(--yellow); text-shadow:0 0 10px var(--yellow); }
+      .leaderboard .scoring { color:var(--muted); font-size:14px; margin:0 0 12px; }
+      .leaderboard ol { list-style:none; margin:0; padding:0; }
+      .leaderboard li { display:grid; grid-template-columns: 22px 1fr auto; align-items:center;
+                        gap:9px; padding:7px 0; border-top:1px solid rgba(255,42,109,.25); }
+      .leaderboard li:first-of-type { border-top:none; }
+      .leaderboard .rank { color:var(--purple); font-weight:700; text-align:right; font-size:18px; }
+      .leaderboard li.top .rank { color:var(--yellow); text-shadow:0 0 8px var(--yellow); }
+      .who { display:inline-flex; align-items:center; gap:8px; min-width:0; font-size:19px; }
+      .who .dot { width:11px; height:11px; border-radius:50%; flex:0 0 auto;
+                  background:var(--c,#fff); box-shadow:0 0 8px var(--c,#fff); }
+      .who .name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+      .stat { text-align:right; }
+      .pts { font-weight:800; font-size:22px; color:#fff; text-shadow:0 0 10px var(--cyan); }
+      .wdl { display:block; color:var(--muted); font-size:13px; }
+
+      @media (max-width: 880px) {
+        .layout { flex-direction: column-reverse; }
+        .leaderboard { position: static; width: auto; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>⚽ World Cup Sweepstake</h1>
+        <div class="sub">
+          {{ total }} tracked match{{ '' if total == 1 else 'es' }} · updated {{ generated_at | local_time }}
+          <span class="badge17">17-BIT</span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <main>
+          {% if picks %}
+          <div class="panel-title">▸ WHO HAS WHICH TEAM</div>
+          <div class="picks-grid">
+            {% for person, teams in picks %}
+            <div class="pick-card" style="--c: {{ person | person_color }}">
+              <div class="pick-name"><span class="dot"></span>{{ person }}</div>
+              <div class="pick-teams">
+                {% for t in teams %}<span class="team-chip">{{ t }}</span>{% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+
+          <div class="panel-title">▸ SCHEDULE</div>
+          {% for day, day_matches in days %}
+          <div class="day">{{ day }}</div>
+          <table>
+            <tbody>
+              {% for m in day_matches %}
+              {% set h2h = m.home_owners and m.away_owners %}
+              <tr class="match {{ 'h2h' if h2h else '' }}">
+                <td class="time">{{ m.utc_kickoff | local_time }}</td>
+                <td>
+                  <div class="fixture">
+                    <span class="side">
+                      <span class="team">{{ m.home_name }}</span>
+                      {% for o in m.home_owners %}<span class="pill" style="--c: {{ o | person_color }}">{{ o }}</span>{% endfor %}
+                    </span>
+                    <span class="vs">v</span>
+                    <span class="side">
+                      <span class="team">{{ m.away_name }}</span>
+                      {% for o in m.away_owners %}<span class="pill" style="--c: {{ o | person_color }}">{{ o }}</span>{% endfor %}
+                    </span>
+                  </div>
+                  {% if h2h %}<span class="h2h-badge">&#9876; HEAD-TO-HEAD</span>{% endif %}
+                </td>
+                <td class="score">
+                  {% if m.home_score is not none and m.away_score is not none %}{{ m.home_score }}–{{ m.away_score }}{% else %}—{% endif %}
+                </td>
+                <td><span class="status {{ m.status }}">{{ m.status }}</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <p style="padding:24px;">No tracked matches found.</p>
+          {% endfor %}
+          <footer>★ FootballWatcherBot · regenerated on every run ★</footer>
+        </main>
+
+        <aside class="leaderboard">
+          <h2>🏆 Leaderboard</h2>
+          <p class="scoring">Win 3 · Draw 1 · per team owned</p>
+          <ol>
+            {% for s in standings %}
+            <li class="{{ 'top' if loop.index <= 3 else '' }}" style="--c: {{ s.person | person_color }}">
+              <span class="rank">{{ loop.index }}</span>
+              <span class="who">
+                <span class="dot"></span>
+                <span class="name">{{ s.person }}</span>
+              </span>
+              <span class="stat">
+                <span class="pts">{{ s.points }}</span>
+                <span class="wdl">{{ s.won }}W {{ s.drawn }}D {{ s.lost }}L</span>
+              </span>
+            </li>
+            {% endfor %}
+          </ol>
+        </aside>
+      </div>
+    </div>
+  </body>
+</html>
