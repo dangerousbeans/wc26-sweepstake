@@ -176,11 +176,31 @@
         <main>
           <div class="panel-title">▸ THE ANTHEM</div>
           <div class="video">
-            <iframe src="https://www.youtube.com/embed/SCgR8h8iRnw?autoplay=1&mute=1&playsinline=1&loop=1&playlist=SCgR8h8iRnw"
-                    title="World Cup Sweepstake anthem" loading="lazy"
+            <iframe id="anthem"
+                    src="https://www.youtube.com/embed/SCgR8h8iRnw?autoplay=1&mute=1&playsinline=1&loop=1&playlist=SCgR8h8iRnw&enablejsapi=1"
+                    title="World Cup Sweepstake anthem"
                     allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
+          <script>
+            // Browsers block autoplay WITH sound, so the anthem starts muted.
+            // Unmute the instant the viewer interacts with the page.
+            (function () {
+              function cmd(func, args) {
+                var f = document.getElementById('anthem');
+                if (f && f.contentWindow) {
+                  f.contentWindow.postMessage(
+                    JSON.stringify({ event: 'command', func: func, args: args || [] }), '*');
+                }
+              }
+              var events = ['pointerdown', 'keydown', 'touchstart'];
+              function unmute() {
+                cmd('unMute'); cmd('setVolume', [100]); cmd('playVideo');
+                events.forEach(function (e) { document.removeEventListener(e, unmute); });
+              }
+              events.forEach(function (e) { document.addEventListener(e, unmute, { passive: true }); });
+            })();
+          </script>
 
           {% if picks %}
           <div class="panel-title">▸ WHO HAS WHICH TEAM</div>

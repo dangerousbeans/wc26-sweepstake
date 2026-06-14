@@ -47,6 +47,7 @@ ALIASES: dict[str, list[str]] = {
     "New Zealand": ["NZ"],
     "Curaçao": ["Curacao"],
     "Qatar": ["State of Qatar"],
+    "Türkiye": ["Turkey", "Turkiye"],
 }
 
 

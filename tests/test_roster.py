@@ -74,7 +74,7 @@ def test_real_roster_loads():
     roster = Roster.load(PROJECT_ROOT / "roster.yaml")
     people = {e.person for e in roster.entries}
     assert people == {
-        "Barrett", "Joran", "Rich", "Sylvia", "Alanah", "Jackie", "Ash", "Tam"
+        "Barrett", "Joran", "Rich", "Sylvia", "Alanah", "Jackie", "Ash", "Tam", "David"
     }
     # Every entry has a country.
     assert all(e.country for e in roster.entries)
