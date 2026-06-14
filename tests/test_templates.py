@@ -77,6 +77,12 @@ def test_dashboard_embeds_youtube():
     assert "youtube.com/embed/SCgR8h8iRnw" in html
 
 
+def test_no_sparkles_before_anyone_scores():
+    # Empty board (everyone on 0) must not sparkle.
+    html = render_dashboard([], datetime.now(timezone.utc), timezone=TZ)
+    assert 'class="spark' not in html
+
+
 def test_dashboard_has_leaderboard_and_pills_and_h2h(match_factory):
     h2h = match_factory(
         match_id=1, status="FINISHED", home_score=2, away_score=1,
@@ -95,6 +101,7 @@ def test_dashboard_has_leaderboard_and_pills_and_h2h(match_factory):
     assert 'class="pill"' in html          # owner pills rendered
     # Joran won the h2h -> appears with 3 points somewhere in the board
     assert "Joran" in html and "Ash" in html and "Rich" in html
+    assert 'class="spark' in html  # leader (Joran, 3pts) gets sparkles
 
 
 def test_dashboard_picks_section(match_factory):

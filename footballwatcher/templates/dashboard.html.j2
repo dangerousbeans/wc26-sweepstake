@@ -134,6 +134,20 @@
       .leaderboard li:first-of-type { border-top:none; }
       .leaderboard .rank { color:var(--purple); font-weight:700; text-align:right; font-size:18px; }
       .leaderboard li.top .rank { color:var(--yellow); text-shadow:0 0 8px var(--yellow); }
+      .leaderboard li.leader { position:relative; }
+      .leaderboard li.leader .name { color:#fff; text-shadow:0 0 10px var(--yellow), 0 0 18px var(--yellow); }
+      .leaderboard li.leader .avatar { border-color:var(--yellow); box-shadow:0 0 12px var(--yellow); }
+      .spark { position:absolute; pointer-events:none; font-size:15px; z-index:3;
+               filter: drop-shadow(0 0 5px var(--yellow)); animation: twinkle 1.7s ease-in-out infinite; }
+      .spark.s1 { top:-7px; left:14px; animation-delay:0s; }
+      .spark.s2 { top:0; right:2px; animation-delay:.55s; }
+      .spark.s3 { bottom:-7px; left:46%; animation-delay:1.1s; }
+      .spark.s4 { top:-4px; right:34%; font-size:11px; animation-delay:.85s; }
+      @keyframes twinkle {
+        0%,100% { opacity:.15; transform:scale(.6) rotate(-12deg); }
+        50%     { opacity:1;   transform:scale(1.25) rotate(16deg); }
+      }
+      @media (prefers-reduced-motion: reduce) { .spark { animation:none; opacity:.9; } }
       .who { display:inline-flex; align-items:center; gap:8px; min-width:0; font-size:19px; }
       .who .dot { width:11px; height:11px; border-radius:50%; flex:0 0 auto;
                   background:var(--c,#fff); box-shadow:0 0 8px var(--c,#fff); }
@@ -162,9 +176,9 @@
         <main>
           <div class="panel-title">▸ THE ANTHEM</div>
           <div class="video">
-            <iframe src="https://www.youtube.com/embed/SCgR8h8iRnw"
+            <iframe src="https://www.youtube.com/embed/SCgR8h8iRnw?autoplay=1&mute=1&playsinline=1&loop=1&playlist=SCgR8h8iRnw"
                     title="World Cup Sweepstake anthem" loading="lazy"
-                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
 
@@ -225,9 +239,12 @@
         <aside class="leaderboard">
           <h2>🏆 Leaderboard</h2>
           <p class="scoring">Win 3 · Draw 1 · per team owned</p>
+          {% set top_points = standings[0].points if standings else 0 %}
           <ol>
             {% for s in standings %}
-            <li class="{{ 'top' if loop.index <= 3 else '' }}" style="--c: {{ s.person | person_color }}">
+            {% set is_leader = top_points > 0 and s.points == top_points %}
+            <li class="{{ 'top' if loop.index <= 3 else '' }} {{ 'leader' if is_leader else '' }}" style="--c: {{ s.person | person_color }}">
+              {% if is_leader %}<span class="spark s1">✨</span><span class="spark s2">⭐</span><span class="spark s3">✨</span><span class="spark s4">✨</span>{% endif %}
               <span class="rank">{{ loop.index }}</span>
               <span class="who">
                 {% if avatars.get(s.person) %}<img class="avatar sm" src="{{ avatars[s.person] }}" alt="" />{% else %}<span class="dot"></span>{% endif %}
