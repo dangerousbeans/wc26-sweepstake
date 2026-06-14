@@ -56,7 +56,7 @@ people:
     - { country: Japan, number: 18 }
     - { country: Australia, number: 27 }
   David:
-    - { country: Switzerland, number: 43 }
+    - { country: Scotland, number: 43 }
     - { country: Norway, number: 31 }
     - { country: Türkiye, number: 22 }
     - { country: Ecuador, number: 24 }
