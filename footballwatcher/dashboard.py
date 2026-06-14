@@ -7,6 +7,7 @@ from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from .avatars import load_avatar_uris
 from .football_data import Match
 from .leaderboard import compute_leaderboard
 from .mailer import _build_env
@@ -49,6 +50,7 @@ def render_dashboard(
         generated_at=generated_at,
         standings=standings,
         picks=picks or [],
+        avatars=load_avatar_uris(),
     )
 
 

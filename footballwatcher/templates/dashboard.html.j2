@@ -75,6 +75,11 @@
                    color:#fff; text-shadow:0 0 8px var(--c, var(--cyan)); }
       .pick-name .dot { width:12px; height:12px; border-radius:50%; background:var(--c, var(--cyan));
                         box-shadow:0 0 8px var(--c, var(--cyan)); }
+      .avatar { width:32px; height:32px; border-radius:50%; object-fit:cover; flex:0 0 auto;
+                border:2px solid var(--c, var(--cyan)); box-shadow:0 0 9px var(--c, var(--cyan)); }
+      .avatar.sm { width:26px; height:26px; border-width:2px; }
+      .pill-av { width:18px; height:18px; border-radius:50%; object-fit:cover; vertical-align:middle;
+                 margin:-2px 5px -2px -5px; border:1px solid rgba(0,0,0,.35); }
       .pick-teams { display:flex; flex-wrap:wrap; gap:6px; }
       .team-chip { font-size:15px; background:rgba(5,217,232,.12); border:1px solid rgba(5,217,232,.4);
                    color:#caf7ff; padding:2px 9px; border-radius:5px; }
@@ -92,6 +97,7 @@
       .fixture { display:flex; flex-wrap:wrap; align-items:center; gap:7px; }
       .side { display:inline-flex; align-items:center; gap:6px; flex-wrap:wrap; }
       .team { font-weight:700; font-size:21px; color:#fff; }
+      .team .flag:not(:empty) { margin-right:7px; }
       .vs { color:var(--purple); margin:0 3px; font-size:16px; }
       .pill { display:inline-flex; align-items:center; font-size:13px; font-weight:700; color:#0a0420;
               padding:1px 10px; border-radius:999px; background:var(--c, #444); letter-spacing:.3px;
@@ -154,9 +160,12 @@
           <div class="picks-grid">
             {% for person, teams in picks %}
             <div class="pick-card" style="--c: {{ person | person_color }}">
-              <div class="pick-name"><span class="dot"></span>{{ person }}</div>
+              <div class="pick-name">
+                {% if avatars.get(person) %}<img class="avatar" src="{{ avatars[person] }}" alt="" />{% else %}<span class="dot"></span>{% endif %}
+                {{ person }}
+              </div>
               <div class="pick-teams">
-                {% for t in teams %}<span class="team-chip">{{ t }}</span>{% endfor %}
+                {% for t in teams %}<span class="team-chip">{{ t | flag }} {{ t }}</span>{% endfor %}
               </div>
             </div>
             {% endfor %}
@@ -175,13 +184,13 @@
                 <td>
                   <div class="fixture">
                     <span class="side">
-                      <span class="team">{{ m.home_name }}</span>
-                      {% for o in m.home_owners %}<span class="pill" style="--c: {{ o | person_color }}">{{ o }}</span>{% endfor %}
+                      <span class="team"><span class="flag">{{ m.home_name | flag }}</span>{{ m.home_name }}</span>
+                      {% for o in m.home_owners %}<span class="pill" style="--c: {{ o | person_color }}">{% if avatars.get(o) %}<img class="pill-av" src="{{ avatars[o] }}" alt="" />{% endif %}{{ o }}</span>{% endfor %}
                     </span>
                     <span class="vs">v</span>
                     <span class="side">
-                      <span class="team">{{ m.away_name }}</span>
-                      {% for o in m.away_owners %}<span class="pill" style="--c: {{ o | person_color }}">{{ o }}</span>{% endfor %}
+                      <span class="team"><span class="flag">{{ m.away_name | flag }}</span>{{ m.away_name }}</span>
+                      {% for o in m.away_owners %}<span class="pill" style="--c: {{ o | person_color }}">{% if avatars.get(o) %}<img class="pill-av" src="{{ avatars[o] }}" alt="" />{% endif %}{{ o }}</span>{% endfor %}
                     </span>
                   </div>
                   {% if h2h %}<span class="h2h-badge">&#9876; HEAD-TO-HEAD</span>{% endif %}
@@ -208,7 +217,7 @@
             <li class="{{ 'top' if loop.index <= 3 else '' }}" style="--c: {{ s.person | person_color }}">
               <span class="rank">{{ loop.index }}</span>
               <span class="who">
-                <span class="dot"></span>
+                {% if avatars.get(s.person) %}<img class="avatar sm" src="{{ avatars[s.person] }}" alt="" />{% else %}<span class="dot"></span>{% endif %}
                 <span class="name">{{ s.person }}</span>
               </span>
               <span class="stat">

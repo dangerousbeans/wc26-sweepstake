@@ -202,6 +202,29 @@ def test_list_matches_skips_malformed_record():
     assert [m.id for m in matches] == [1]
 
 
+def test_avatars_load_as_data_uris():
+    from footballwatcher.avatars import load_avatar_uris
+
+    uris = load_avatar_uris()
+    # The 8 sweepstake people have committed avatars.
+    for person in ["Joran", "Barrett", "Alanah", "Rich", "Sylvia", "Tam", "Ash", "Jackie"]:
+        assert person in uris, f"missing avatar for {person}"
+        assert uris[person].startswith("data:image/png;base64,")
+
+
+def test_dashboard_embeds_avatar_and_flag(match_factory):
+    m = match_factory(home_name="Netherlands", home_owners=["Joran"])
+    from footballwatcher.avatars import load_avatar_uris
+
+    html = render_dashboard(
+        [m], datetime.now(timezone.utc), timezone=TZ,
+        people=["Joran"], picks=[("Joran", ["Netherlands"])],
+    )
+    # Avatar embedded as a data URI, flag emoji present for Netherlands.
+    assert "data:image/png;base64," in html
+    assert "\U0001F1F3\U0001F1F1" in html  # 🇳🇱
+
+
 def test_fallback_summary(match_factory):
     m = match_factory(
         status="FINISHED", home_score=3, away_score=0,

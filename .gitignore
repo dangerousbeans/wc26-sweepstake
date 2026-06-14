@@ -9,3 +9,5 @@ teams.json
 public/
 .omc/
 .pytest_cache/
+
+icons/

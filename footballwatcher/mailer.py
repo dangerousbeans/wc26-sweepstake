@@ -41,9 +41,12 @@ def _build_env(timezone: str) -> Environment:
         hue = h % 360
         return f"hsl({hue} 90% 60%)"
 
+    from .flags import flag
+
     env.filters["local_time"] = local_time
     env.filters["owners_label"] = owners_label
     env.filters["person_color"] = person_color
+    env.filters["flag"] = flag
     return env
 
 
