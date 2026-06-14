@@ -72,6 +72,11 @@ def test_dashboard_empty():
     assert "No tracked matches found." in html
 
 
+def test_dashboard_embeds_youtube():
+    html = render_dashboard([], datetime.now(timezone.utc), timezone=TZ)
+    assert "youtube.com/embed/SCgR8h8iRnw" in html
+
+
 def test_dashboard_has_leaderboard_and_pills_and_h2h(match_factory):
     h2h = match_factory(
         match_id=1, status="FINISHED", home_score=2, away_score=1,
